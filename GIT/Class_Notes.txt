@@ -259,6 +259,8 @@ Day 23: 28th Aug. 2024
 	git add file1.txt 
 	
 	git commit -m "Commit_Msg"
+or 
+git -c user.name="Prathy" -c user.email="pradhishtaa@gmail.com" commit -m "Created file1.txt" ## edited by me
 	
 	git log 					# To get the list of commits made in the repository
 	
