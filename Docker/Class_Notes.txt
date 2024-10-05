@@ -1,0 +1,818 @@
+
+
+#######################
+Day 31: 12th Sep. 2024
+#######################	
+
+	Containerization using Docker!
+	
+	Docker!!!
+	
+	Containerization :::
+	
+		--> Containerization is a process of packaging the application along with its dependencies!
+	
+	
+	
+	Virtual Machines :
+	
+		- VMs are hardware level Virtualization 
+		- VMs are created using Hypervisor 
+		- VMs are used to run the Operating Systems
+		- VMs will continue to execute even if there is no task or active applications
+		- VMs consume more space and time to start up.
+		
+	Containers :
+	
+		- Containers are hardware level Virtualization 
+		- Containers are created using Container Engine 
+		- Containers are used to run the the Application. NOT Operating Systems
+		- Containers will immediately go to EXIT state, if there is no task or active applications
+		- Containers consume less space and time to start up
+		- Using Containers we can reduce the no. of VM, But we cannot completely elimate VMs
+		- Container run in its own isolated address spac, the scope of the container application is within the container 
+	
+	
+		--> Containerization is a process of packaging the application along with its dependencies!	
+
+	Container Use-Cases :::
+		
+	Infra-Structure Perspective :::	
+	
+		--> Containers are used to reduce the number of VMs and save the Infra-Structure Cost!
+		
+			Jenkins_Master (VM)			==> To Create Jenkins CI/CD Pipeline Projects and schedule to the builds in the slave_nodes
+																	
+				Jenkins_SlaveNode1 (VM)	==> Perform Application Builds - Java Applications 
+				Jenkins_SlaveNode2 (VM)	==> Perform Application Builds - .Net Applications			
+				Jenkins_SlaveNode3 (VM)	==> Perform Application Builds - Python Applications 
+				Jenkins_SlaveNode4 (VM)	==> Perform Application Builds - Angular/NodeJS
+				Jenkins_SlaveNode5 (VM)	==> Perform Application Builds - Ruby 
+		
+		--> Using Containers :
+		
+			Jenkins_Master (VM)	
+				- Jenkins_Build_Server (VM)
+					- Install Container Engine  
+						C1			==> Perform Application Builds - Java Applications 
+						C2          ==> Perform Application Builds - .Net Applications	
+						C3          ==> Perform Application Builds - Python Applications
+						C4          ==> Perform Application Builds - Angular/NodeJS
+						C5          ==> Perform Application Builds - Ruby 
+		
+	Developers'/Deployment Perspective ::: 
+	
+		--> Containers are used to package the application along with its dependencies and deploy in target environments!	
+
+
+		Environments:
+		
+			Dev Environment (VM)
+			
+				Developers Create the Source Code 
+					Build - Compile and Create Artifacts 				==>	mywebapp.war 
+					Run the Application and do Unit Testing 
+						--> jdk_11,tomcat_8.0 	- using this jdk and tomcat mywebapp.war got executed and tested
+					Promote the Application to QA / UAT / Prod 
+					
+			QA Environment 	(VM)										==> mywebapp.war
+				Testing Team will Run the Application and do QA Testing 
+						--> jdk_17,tomcat_9.0
+				
+			UAT Environment 
+				Testing Team will Run the Application and do QA Testing 
+			
+
+
+		--> Using Containerization Process :::
+			
+		--> Containerization is a process of packaging the application along with its dependencies!	
+			Using Containerization ::::
+			
+			
+			Dev Environment (VM)
+			
+				Developers Create the Source Code 
+					Build - Compile and Create Artifacts 				==>	mywebapp.war 
+					Run the Application and do Unit Testing 
+						--> jdk_11,tomcat_8.0 	- using this jdk and tomcat mywebapp.war got executed and tested
+						
+					Package the application - (mywebapp.war + jkd_11,tomcat_8.0)	--> Application Images 	
+					
+					Create Application Image --> mywebapp_imgv1.0
+					
+					Publish/Push/Save the Application Image to the Container Registry and version control it.
+						
+						
+			QA Environment 	(VM)								
+				Testing Team will Pull the Application Image from Container Registry and run it as an Application Container.
+					==> mywebapp_imgv1.0		--> (mywebapp.war + jkd_11,tomcat_8.0)
+			
+			
+	Terminolgies :::
+	
+		Container Engine 
+			-- Is used to Create/Manage Container Images and Create/Manage and run Containers	
+		
+		Container Images 
+			--	Is a Static file that defined the properties of the Container and its dependencies 
+			--  Container Images are Non-Executables
+			--  Container Images are composed of various Layers created using the Dockerfile Instructions
+			
+		Containers 
+			--	Containers are the executable units of Container Images
+			-- 	Containers are used to run the applications defined in the Container Images 		
+		
+		Container Registry 
+			--	It is used to save and version control the Container Images 
+				Dockerhub is Container Registry to be used.
+				https://hub.docker.com/			
+		
+		Container Repositories
+			--	Container Repositories	are the subset of Container Registry
+			
+			github 			Docker-Hub_Registry
+				repo1			Docker-hub_Repository1
+				repo2			Docker-hub_Repository2
+			
+			
+	Working with Docker!
+	
+		- Install Docker Engine 
+			# https://docs.docker.com/engine/install/
+			
+			- Launch Ubuntu Machine - v22.04 / Use existing Jenkins Slave Node to Installl Docker Engine
+			
+			- sudo -i 
+			- apt update -y 			
+			- apt install docker.io -y
+		
+		
+		- Docker CLI Commands
+		
+		docker --version
+		
+		
+		docker images 			# To get the list of images in local machine 
+		
+		docker ps 				# To get the list of Active/Running Containers 
+		
+		docker ps -a			# To get the list of all containers
+		
+		
+		Container Registry 
+			--	It is used to save and version control the Container Images 
+				Dockerhub is Container Registry to be used.
+				https://hub.docker.com/			
+		
+		Container Repositories
+			--	Container Repositories	are the subset of Container Registry
+
+
+
+		docker pull <Image_Name>	# To download the docker container image from dockerhub registry to lacl machine 
+		
+			docker pull centos:latest
+			docker pull ubuntu:v1.0
+			
+			
+#######################
+Day 32: 13th Sep. 2024
+#######################	
+
+	docker pull <Image_Name> 				# TO Download the latest version of Container Image 
+	
+	docker pull <Image_Name>:<tag>			# TO Download the specific version of Container Image 
+	
+	
+	docker run <Image_Name>					# To Create and run the Container 
+	
+	Container Execution Modes ::
+	
+		- Foreground / Attached Mode 		# Default Mode 
+		
+				docker run <image_name> 
+				
+				Eg.: 
+				
+					docker run centos sleep 20 
+		
+		- Background / Detached Mode 
+			
+				docker run -d <image_name> 
+				Eg.: 
+				
+					docker run -d centos sleep 20 	
+		
+		- Interactive Mode 
+		
+				docker run -d <image_name> 
+				Eg.: 
+				
+					docker run -it centos bash 			
+
+	
+	docker start <container_id>						# To Start the Container 
+	
+	docker stop <container_id>						# To Stop the container 
+	
+	docker exec -it <container_id> bash 			# To Login to the running Container 
+	
+	docker rm <container_id>						# To remove/delete the Container 
+	
+	docker rmi <image_name>							# To remove/delete the Image from local machine
+	
+	
+	Port Mapping / Port Binding ::::
+	
+		- It is used to expose the container to access thru internet 
+		
+		- It is a process of mapping the container port with the host port.
+	
+	Run Application inside the Container!
+	
+		docker run -it tomcat:8.0 bash
+		
+		docker run -it -p <host_Port>:<container_Port> tomcat:8.0
+		
+		Eg:
+		
+		docker run -it -p 8089:8080 tomcat:8.0
+	
+		-p <host_Port>:<container_Port>
+		
+		
+	QA_Server :::
+	
+		Installed Tomcat ::
+		
+		8080 --> Execute only one application 
+		
+		service1 -- 8080
+		
+		service2 -- 8089
+		
+
+#######################
+Day 33: 16th Sep. 2024
+#######################	
+
+
+	Docker Volumes ::::
+	
+	
+		Container :::
+		
+			- Runs in an isolated address space.
+			
+		Monolith
+		Micro-Service
+		3-tier Applications
+			
+			
+		Container
+			
+			Stateless Applications
+				- Application that will not have any state of execution
+				- Applications that will not create any output/need any input.
+		
+			Stateful Applications ::
+				- Application that will have state of execution
+				- Applications that requires some input nad generate some output
+			
+			
+			
+		User_Login/SignIn Services :::
+		
+		3 - Tier Application Layers :::
+		
+			Front-End - User Interface 
+			
+			Application Layer - Business Logic 
+			
+			Back-End Layer - DataBase 
+			
+			
+		docker volume :::
+			
+			- Is used to create permanent Volumes that can be attached to any container to maintain the persistant data accross the Applications running thru containers. 
+			
+			
+		docker volume create <vol_name>
+		
+		docker volume inspect <vol_name>
+		
+		docker run -it centos bash 
+		
+		docker run -it --mount source=sa-wd-devops-vol1,destination=/sa-wd-devops-vol1 centos bash
+		
+	
+	
+	Create Container Images ::::
+	
+	
+		docker commit ::
+		
+			- To Create a New Container Image based on the properties of existing Container.
+			
+			Syntax :
+
+				docker commit <existing_container_id> <dockerhub_repo_name>/New_Image_Name>:<tag_Name>
+
+			Eg.: 
+				docker commit 6070980df5f2 loksaieta/sa-javaappbuildimg:v1.0
+		
+			
+		
+		docker build ::
+		
+			- To create a new Container Image based on the Dockerfile reference.
+			- Dockerfile composed of Instructions to Create Docker Container Images
+			- Application Developers create the Dockerfile and update in the Source Code Repository. 
+			
+		
+		vi Dockerfile 
+		
+		FROM ubuntu 
+		RUN apt update -y 
+		RUN apt install git -y 
+		RUN apt install maven -y 
+		
+			Syntax :
+			
+			docker build -t <dockerhub_repo_name>/New_Image_Name>:<tag_Name> .		# '.' refers to the Dockerfile path
+			
+			Eg.:
+			
+			docker build -t loksaieta/sa-javamvnimg .		# '.' refers to the Dockerfile path
+			
+		Write Dockerfile :::
+		
+			Docker File Instructions :::
+			
+			FROM 									# To Identify the Base Image
+			RUN 									# To run the package manager
+			COPY 									# To Copy the file from host volume to container volume
+			CP 										# To Copy the file within the container volumes 
+			ADD 									# To Copy the file from Host Volume as well as from URL
+			ENV 									# To define the Environment Variable 
+			ARG 									# To pass Arguements to the Steps in Dockerfile 
+			EXPOSE									# To Define the Container Port 
+			WORKDIR									# To set the current working directory within the Container 
+			CMD										# To set the default start-up command to the container 
+													  This Command can be changed at run-time.
+			ENTRYPOINT								# To set the default start-up command to the container 
+													  This Command cannot be changed at run-time.			
+			
+			
+			
+			Dockerfile :::
+			
+			FROM tomcat:8.0
+			COPY ./target/*.war /usr/local/tomcat/webapps
+			EXPOSE 8080		
+			
+			docker build -t loksaieta/sa-webappimg:v1.0 .			# run this command from the Dockerfile location.
+			docker run -it -p 8089:8080 loksaieta/sa-webappimg:v1.0
+			
+		
+
+#######################
+Day 34: 18th Sep. 2024
+#######################	
+
+
+	Container Orchestration ::::
+	
+		Overview of ;
+			Docker Compose
+			Docker Swarm 
+			
+		Kubernetes
+		
+	Containers :::
+	
+	
+	3-Tier Application Service :
+	
+		User_SignIn Service :
+	
+			Front-End			-->		C1.0 
+			
+			Application_Layer 	-->		C2.0
+			
+			Database Layer 		-->		C3.0
+			
+			
+			
+			docker run c1.0_image
+			
+			docker run c2.0_image
+			
+			docker run c3.0_image
+			
+			
+		Need run the containers as a service! 
+		
+		How to execute more than once container as a service ???
+		
+		Docker Compose
+			- Is an extension/Plugin to Docker Engine.
+			- Is used to run multiple containers as a Service!
+			- Docker Compose uses the Yaml file to create the Service definitions
+			
+		User_SignIn_Service:
+			C1.0 
+            C2.0            
+            C3.0
+				
+			
+			Any Container that is part of a Service :
+		
+				should be in-sync with other container within the service 
+				
+				
+				Start/Stop all these container at the same time.
+		
+		
+		
+		Work with Docker Compose ::
+		
+			Install Docker_Compose
+			
+			https://docs.docker.com/compose/install/linux/
+			
+# Manual Installation of Docker Compose :::
+			
+DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+mkdir -p $DOCKER_CONFIG/cli-plugins
+curl -SL https://github.com/docker/compose/releases/download/v2.24.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+
+chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+	
+docker compose version
+
+vi docker-compose.yaml
+
+
+
+### Yaml Files are based on Keys & Values -- key:value Pairs
+
+version: '3'
+services:
+  webserv1:
+    image: "tomcat:8.0"
+    ports:
+      - 8098:8080
+  dbserv1:
+    image: "redis:alpine"
+	
+docker compose up 
+
+docker compose down 
+
+
+	Docker Swarm ::::
+
+	Container Orchestration Tool ::::
+	
+		- Docker Swarm is one the Container Orchestration Tools.
+		- It is meant only for Docker Containers.
+		- Used to Ensure High Availability of Containers by creating Replicas of Containers.
+		- We cannot Do Auto-Scaling or Load Balancing!
+
+
+
+	3-Tier Application Service :
+	
+		User_SignIn Service :
+	
+			Front-End			-->		C1.0,C1.1,C1.2,C1.3,C1.4 
+			
+			Application_Layer 	-->		C2.0,C2.1,C2.2,C2.3,C2.4
+			
+			Database Layer 		-->		C3.0,C3.1,C3.2,C3.3,C3.4
+
+
+
+
+	Prod-Environment
+	
+		Production server1,2,3,4,5,6 
+
+
+
+	Web Application:
+	
+		5000 Users to access my website at the same time 
+		
+			100 Container Instances 
+
+		10000 
+
+			200 Container Instances ?				# Scale-Up the Container Instances 
+
+		5000 
+
+			100 Container Instances ?				# Scale-Down the Container Instances 
+
+Summary :::
+
+		Containerization
+		VM (vs) Container
+		How install Container Engine 
+		Docker CLi Commands 
+		3 Mode of Docker run command 
+		exec 
+		persistant volumes 
+		Create Images - docker commit and build command 
+		Dockerfile Instructions 
+		Docker Compose & Swarm 
+
+
+Next :
+	Kubernetes :::::
+	
+
+	
+#######################
+Day 34: 18th Sep. 2024
+#######################	
+	
+				
+	Kubernetes ::::
+	
+		- It is a Open-Source Container Orchestration Tool 
+		- Kubernetes is used to Deploy any type of Containers.
+		- It is used to ensure high availability of the Applications/services running thru Containers.
+		- Used to Ensure High Availability of Containers by creating Replicas of Containers.
+		- It supports Auto-Scaling & Load Balancing.
+		
+	Managed Services ::
+
+		AWS 	- ECS/ECR/EKS 
+		Azure 	- ACS/ACR/AKS 
+			
+	GOOGLE !	
+		
+	Kubernetes Architecture 
+	
+	Kubernetes Components
+	
+	Install Kubernetes
+	
+	DevOps ::::
+
+
+
+Docker Swarm ::::
+
+	Container Orchestration Tool ::::
+	
+		- Docker Swarm is one the Container Orchestration Tools.
+		- It is meant only for Docker Containers.
+		- Used to Ensure High Availability of Containers by creating Replicas of Containers.
+		- We cannot Do Auto-Scaling or Load Balancing!
+		
+		
+			Service :::
+			
+				Front_End			C1 / Replicas of C1 - 3 Replicas 
+				
+				Application_Layer	C2 
+				
+				Back_End (DataBase) C3 
+				
+				
+	Kubernetes ::::
+	
+		- It is a Open-Source Container Orchestration Tool 
+		- Kubernetes is used to Deploy any type of Containers.
+		- It is used to ensure high availability of the Applications/services running thru Containers.
+		- Used to Ensure High Availability of Containers by creating Replicas of Containers.
+		- It supports Auto-Scaling & Load Balancing.
+		
+		
+	Working with Kubernetes :::
+	
+		- Used to deploy the Containerized Application Services to the Target Environments 
+		
+		Docker Images ::::
+		
+		
+		Container Registry :::
+		
+			- Used to manage the container Images 
+			- DockerHub
+			
+	Continous Integration/Continous Deployment Workflow :::
+	
+		1. Create Source Code 
+		2. Application  Build 
+		3. Application Image Build using Dockerfile 
+		4. Publish the Application Image to Container Registry 
+		
+		5. Deploy the Application Images to the Target Environments using Kubernetes
+		
+		
+	
+	
+		1. Publish/Push the Application Images to Container Registry.
+		
+Next :
+			How to Publish/Push the Application Images to Container Registry ?
+			How to Deploy to Kubernetes Cluster?
+			How to Ensure High Availability of Application by creating replicas?
+		
+			Kubernetes Architecture ???
+			
+			Kubernetes Components/Terminologies/Concepts ???
+			
+			Install Kubernetes ???
+				
+				
+#######################
+Day 35: 19th Sep. 2024
+#######################		
+		
+	Docker ::
+		
+		Publish/Push the Application Images to Container Registry. 
+				
+			vi Dockerfile 			
+
+			
+			FROM tomcat:8.0
+			COPY ./target/*.war /usr/local/tomcat/webapps
+			EXPOSE 8080		
+			
+			docker build -t loksaieta/sa-webappimg:v1.0 .			# run this command from the Dockerfile location.
+
+			docker run -it -p 8089:8080 loksaieta/sa-webappimg:v1.0
+	
+	
+		Publish/Push the Application Images to Container Registry. 
+			
+			Login to DockerHub using Docker CLI.
+				- DockerHub LoginID 
+				- DockerHub Access Token 
+					- Create Access Token in DockerHub 
+					
+			docker login -u loasxsdksaieta
+						
+			Password: dcasdfasdfasdfasdfasdfasdfasdf
+			
+			
+					
+			docker push loksaieta/sa-webappimg:v1.0
+			
+			docker pull loksaieta/sa-webappimg:v1.0
+		
+		
+		
+		
+	Thru Jenkins pipeline, create container images and Publish to Container registry.	
+
+		Jenkins ::		with master/slave Nodes!
+		
+		Pipeline :		
+			SCM_Checkout 
+			Application_Build 
+			Deploy Application Artifacts to Target Environment
+				
+		
+pipeline {
+     agent { label 'slave1' }
+
+    stages {
+        stage('SCM_Checkout') {
+            steps {
+                echo 'Perform SCM Checkout'
+                git 'https://github.com/SA-AWS-DevOps-July24/java-mvn-springbootapp.git'
+            }
+        }
+        stage('Application Build') {
+            steps {
+                echo 'Perform Application Build'
+                sh 'mvn clean package'
+            }
+        }
+        stage('Deploy to Test Environment') {
+            steps {
+                script{
+                    sshPublisher(publishers: [sshPublisherDesc(configName: 'SA_WD_Tomcat_Server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                }
+            }
+        }
+    }
+}
+
+
+	Objective :::
+	
+		Jenkins pipeline, perform application build, create container images and Publish to Container registry.	
+		
+		
+	Resources - Servers/Tools Needed :
+	
+	
+		Servers :::
+		
+			Jenkins_Master							--> # To create CICD Pipeline Jobs and schedule it to run in Slave Nodes
+			
+				Build_Server-Jenkins_Slave 									--> # Compile the Source Code 
+				(Perform Application Build and Docker Build)					# Perform Unit Testing 
+																				# Create Artifacts 
+																				# Create Application Image 
+																				# Publish Application Image to DockerHub Registry
+		
+		Tools ::::
+	
+			Jenkins_Master						--->	# jdk, jenkins, git 				
+		    
+            	Build_Server-Jenkins_Slave 		--->	# git, jdk, maven, docker
+				
+
+		Maintain DockerHub Credentials in the Jenkins Credential Manager 
+			goto jenkins dashboard 
+				-- Manage Jenkins 
+					-- Credential 
+						-- using dockerhub username and access token 
+						
+
+pipeline {
+     agent { label 'slave1' }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	}
+		
+    stages {
+        stage('SCM_Checkout') {
+            steps {
+                echo 'Perform SCM Checkout'
+                git 'https://github.com/SA-AWS-DevOps-July24/java-mvn-springbootapp.git'
+            }
+        }
+        stage('Application Build') {
+            steps {
+                echo 'Perform Application Build'
+                sh 'mvn clean package'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                echo 'Perform Docker Build'
+				sh "docker build -t loksaieta/sa-wd-webapp:${BUILD_NUMBER} ."
+				sh 'docker image list'
+            }
+        }
+        stage('Login to Dockerhub') {
+            steps {
+                echo 'Login to DockerHub'				
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                
+            }
+        }
+        stage('Publish the Image to Dockerhub') {
+            steps {
+                echo 'Publish to DockerHub'
+				sh "docker push loksaieta/sa-wd-webapp:${BUILD_NUMBER}"                
+            }
+        }
+    }
+}
+
+
+Docker :::
+
+		Containerization
+		VM (vs) Container
+		How install Container Engine 
+		Docker CLi Commands 
+		3 Mode of Docker run command 
+		exec 
+		persistant volumes 
+		Create Images - docker commit and build command 
+		Dockerfile Instructions 
+		Docker Compose & Swarm 
+		
+		Create Jenkins CICD Pipeline to perform application build, create container images and Publish to Container registry.	
+
+	
+	Dev 
+	
+	Build 		Create Docker Images 
+	
+	QA / UAT / Prod 	# Deployed using Kubernetes
+	
+	
+Next :::
+
+	Kubernetes ::::
+	
+		Kubernetes Architecture
+		
+		Kubernetes Components/Terminologies/Concepts
+		
+		Install Kubernetes			
